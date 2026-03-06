@@ -1,0 +1,10 @@
+
+.geist-font {
+  font-family: "Geist", sans-serif;
+  font-optical-sizing: auto;
+}
+
+*{
+    box-sizing: border-box;
+    font-family: "Geist", sans-serif;
+}
