@@ -1,129 +1,82 @@
-# 🌟 Welcome To (সহজ সরল সিম্পল) Assignment - 5
+# GitHub Issues Tracker
 
-# **📅 Deadline For 60 marks:** 9th March, 2026 (11:59 pm ⏱️)  
-#  📅 No Deadline For 50 marks  
-# **📅 Deadline For 30 marks:** Any time after 9th March.
+A responsive static frontend for browsing project issues from the Phi Lab API. The app includes a guarded login page, issue status tabs, API-backed search, loading states, and a detail modal for individual issues.
 
----
+## Live Flow
 
-# Assignment-05: GitHub Issues Tracker
+1. Sign in with the demo admin account.
+2. Review all issues by default.
+3. Switch between `All`, `Open`, and `Closed`.
+4. Search issues with the provided search endpoint.
+5. Click any issue card to open the full detail modal.
 
-
-### **API Endpoints:**
-###  **All Issues:** 
-  - https://phi-lab-server.vercel.app/api/v1/lab/issues 
-
-
-###  **Single Issue:**
-   - https://phi-lab-server.vercel.app/api/v1/lab/issue/{id}
-
-   - Example: https://phi-lab-server.vercel.app/api/v1/lab/issue/33
-
-
-###  **Search Issue:** https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q={searchText}
-
-   - Example:  https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=notifications
-
-
----
-
-## 📝 Main Requirements
-
-## 🎨 Design Part
-
-## Login Page
-- Create a login page containing a logo, title, and sub-title
-- Below that, there will be 2 inputs, a sign-in button, and a demo credential to sign in. Follow the Figma for this page 
-- Styled as per Figma
-
-## Main Page: 
-
-### Navbar: 
-
-- Navbar with website logo/name on the left
-- Search input and button on the right
-
-### Tab Section like Figma: 
-
-- 3 tab ( All, Open, Closed) at the top of this section.(**All**, **Open**, **Closed**)
-
-- Below the tab, there will be an icon, the issue count, some text on the left, and an open and closed marker on the right
-
-- Responsiveness: The website should be responsive for mobile devices. It is totally up to you. 
-
-
---- 
-
-
-## ⚙️ Functionalities
-- In login page, there will be default admin credentials (username, password). You need to sign in using these credentials.
-
-- Load all issues and display as per Figma
-
-- On clicking on an open or closed tab, it will load the issues data of the related tab and show it in a display-like card in a 4-column layout like Figma. By default, it will show all data 
-
-- Each card shows:
-  - Title
-  - Description
-  - Status
-  - Category
-  - Author
-  - Priority
-  - Label
-  - CreatedAt
-- Clicking on a tree name in a card will open a modal and show all the information about that Issue. 
-
-### 🚀 Challenges
-
-
-- Show the card Top border based on their category(open, closed), open card will have Green Boder, closed card will have a purple border on top. 
-
-- Loading spinner on data load
-
-- Show active button on changing category names
-
-- Implement Search Functionality and 8 meaningful github commit.  
-
-- Create a readme file and answer this question on your own. Don’t copy-paste from Google or any AI chatbot. 
-    - 1️⃣ What is the difference between var, let, and const?
-    - 2️⃣ What is the spread operator (...)?
-    - 3️⃣ What is the difference between map(), filter(), and forEach()?
-    - 4️⃣ What is an arrow function?
-    - 5️⃣ What are template literals?
-
-
----
-
-## 🛠️ Technology Stack
-
-- **HTML**
-- **CSS** (Vanilla/Tailwind/DaisyUI)
-- **JavaScript** (Vanilla)
-
----
-
-## 🔑 Demo Credentials
+## Demo Credentials
 
 ```text
 Username: admin
 Password: admin123
 ```
 
+## Features
 
----
+- Login gate using `localStorage`
+- Responsive dashboard layout
+- Four-column card grid on large screens
+- Green top border for open issues
+- Purple top border for closed issues
+- Loading spinner for API requests
+- Empty and error states
+- Search using the assignment API
+- Issue detail modal using the single-issue endpoint
 
-### Optional: 
- - No need to show status: Open, Closed styles On modals. 
- - No Need to show icon on labels 
- - No need to apply styles on Priority 
---- 
+## Tech Stack
 
+- HTML
+- CSS
+- JavaScript
 
-## 📤 What to submit
+## Project Files
 
-- **GitHub Repository Link:**
-- **Live Site Link:**
+- [index.html](/c:/Projects/A5-Issue-Tracker/B13-A5-Github-Issue-Tracker/index.html)
+- [issues.html](/c:/Projects/A5-Issue-Tracker/B13-A5-Github-Issue-Tracker/issues.html)
+- [styles.css](/c:/Projects/A5-Issue-Tracker/B13-A5-Github-Issue-Tracker/styles.css)
+- [login.js](/c:/Projects/A5-Issue-Tracker/B13-A5-Github-Issue-Tracker/login.js)
+- [issues.js](/c:/Projects/A5-Issue-Tracker/B13-A5-Github-Issue-Tracker/issues.js)
 
----
+## Run Locally
 
+There is no build step. Open the project with a static server such as VS Code Live Server, then load `index.html`.
 
+## API Endpoints Used
+
+- All issues: `https://phi-lab-server.vercel.app/api/v1/lab/issues`
+- Single issue: `https://phi-lab-server.vercel.app/api/v1/lab/issue/{id}`
+- Search: `https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q={searchText}`
+
+## JavaScript Questions
+
+### 1. What is the difference between `var`, `let`, and `const`?
+
+`var` is function-scoped and can be redeclared, which makes it easier to accidentally overwrite values. `let` is block-scoped, so it stays inside the nearest braces and is safer for values that will change. `const` is also block-scoped, but it is for bindings that should not be reassigned after creation.
+
+### 2. What is the spread operator (`...`)?
+
+The spread operator lets one array, object, or iterable be expanded into another place. I use it when I want to copy values, merge objects, or pass a list of items into a function without writing each one by hand.
+
+### 3. What is the difference between `map()`, `filter()`, and `forEach()`?
+
+`map()` transforms every item and returns a new array of the same length. `filter()` keeps only the items that pass a condition and returns a smaller or equal-sized array. `forEach()` just runs code for each item and does not build a new array for you.
+
+### 4. What is an arrow function?
+
+An arrow function is a shorter way to write a function expression. It is useful for callbacks and small helper functions, and it also keeps the surrounding `this` value instead of creating a new one.
+
+### 5. What are template literals?
+
+Template literals are strings written with backticks. They make it easier to insert variables with `${value}` and to write multi-line strings without stitching lines together manually.
+
+## Notes
+
+- The login is intentionally simple because this is a frontend-only assignment.
+- Search uses the API endpoint first, then the tab buttons filter those returned results.
+- The modal fetches the selected issue again so the detail view is based on the single-issue endpoint.
