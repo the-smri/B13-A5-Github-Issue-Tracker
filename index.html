@@ -3,43 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Github Issues Tracker</title>
-
-    <!-- Google Fonts -->
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-
-    <!-- Tailwind + DaisyUI -->
-     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-    <!-- Custom Styles -->
+    <title>GitHub Issues Tracker | Sign In</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css">
 </head>
-<body>
-    <header class="flex flex-col mx-auto max-w-[520px] max-h-[740px] my-10 justify-center items-center fieldset bg-base-200 border-base-300 rounded-box w-xs border">
-        <img src="./assets/github-logo.png" alt="GitHub Logo" class="mx-auto w-20" />
-        <fieldset class="">
-    <h2 class="fieldset-legend justify-self-center text-center font-semibold text-2xl">GitHub Issues Tracker</h2>
-    <p class="fieldset-legend justify-self-center text-center opacity-70">Sign in to manage your issues</p>
+<body class="auth-page">
+    <main class="auth-shell">
+        <section class="auth-card">
+            <div class="brand-lockup">
+                <div class="brand-mark">
+                    <img src="./assets/github-logo.png" alt="GitHub Issues Tracker logo">
+                </div>
+                <p class="eyebrow">Phi Lab Assignment</p>
+                <h1>GitHub Issues Tracker</h1>
+                <p class="auth-subtitle">Sign in with the admin account to review, search, and inspect project issues.</p>
+            </div>
 
-  <label class="label">Username</label>
-  <input type="text" class="input" placeholder="Enter Username" />
-  <p class="text-[#4A00FF] mb-4">Default: admin</p>
+            <form id="loginForm" class="auth-form" novalidate>
+                <label class="field">
+                    <span>Username</span>
+                    <input id="username" name="username" type="text" autocomplete="username" placeholder="Enter username">
+                </label>
 
-  <label class="label">Password</label>
-  <input type="password" class="input" placeholder="Enter Password" />
-  <p class="text-[#4A00FF] mb-4">Default: admin123</p>
-  <button class="btn btn-primary w-full mb-4">Sign In</button>
-  <p class="justify-self-center text-center">OR</p>
-  <hr class="w-full border-t border-base-300" />
+                <label class="field">
+                    <span>Password</span>
+                    <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password">
+                </label>
 
-  <p class="justify-self-center text-center mb-4">Demo Credentials:</p>
-  <p class="justify-self-center text-center"><span class="font-semibold"
-    >Username:</span> admin</p>
-  <p class="justify-self-center text-center"><span class="font-semibold">Password:</span> admin123</p>
-</fieldset>
-    </header>
+                <p id="loginError" class="form-error" aria-live="polite"></p>
+
+                <button type="submit" class="primary-button">Sign In</button>
+            </form>
+
+            <button id="demoButton" class="demo-card" type="button">
+                <span class="demo-label">Demo Credentials</span>
+                <span><strong>Username:</strong> admin</span>
+                <span><strong>Password:</strong> admin123</span>
+                <span class="demo-hint">Click to autofill the form.</span>
+            </button>
+        </section>
+    </main>
+
+    <script src="./login.js"></script>
 </body>
 </html>

@@ -1,10 +1,42 @@
-
-.geist-font {
-  font-family: "Geist", sans-serif;
-  font-optical-sizing: auto;
+:root {
+    --bg: #f4f5f8;
+    --surface: #ffffff;
+    --text: #1c2331;
+    --muted: #6e7688;
+    --line: #e5e8f0;
+    --brand: #5a2df5;
+    --brand-dark: #4317d7;
+    --success: #12b981;
+    --closed: #9b5cf7;
+    --danger: #ef4444;
+    --shadow: 0 18px 48px rgba(20, 27, 45, 0.08);
 }
 
-*{
+* {
     box-sizing: border-box;
-    font-family: "Geist", sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: var(--text);
+    background: var(--bg);
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+[hidden] {
+    display: none !important;
 }
