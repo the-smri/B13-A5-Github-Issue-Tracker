@@ -160,8 +160,8 @@ async function loadIssues(query = state.searchQuery) {
 function renderIssues() {
     const visibleIssues = getVisibleIssues();
     const totalIssues = state.issues.length;
-    const openIssues = state.issues.filter((issue) => normalizeStatus(issue.status) === "open").length;
-    const closedIssues = state.issues.filter((issue) => normalizeStatus(issue.status) === "closed").length;
+    const openIssues = state.issues.filter((issue) => normalizeStatus(readIssueStatus(issue)) === "open").length;
+    const closedIssues = state.issues.filter((issue) => normalizeStatus(readIssueStatus(issue)) === "closed").length;
 
     updateSummary(visibleIssues.length, openIssues, closedIssues, totalIssues);
 
@@ -189,7 +189,7 @@ function renderIssues() {
 
 function getVisibleIssues() {
     return state.issues.filter((issue) => {
-        const issueStatus = normalizeStatus(issue.status);
+        const issueStatus = normalizeStatus(readIssueStatus(issue));
         const matchesTab = state.activeTab === "all" ? true : issueStatus === state.activeTab;
 
         return matchesTab;
@@ -197,12 +197,12 @@ function getVisibleIssues() {
 }
 
 function createIssueCard(issue) {
-    const status = normalizeStatus(issue.status);
+    const status = normalizeStatus(readIssueStatus(issue));
     const title = escapeHtml(issue.title || "Untitled issue");
     const description = escapeHtml(issue.description || "No description provided.");
     const author = escapeHtml(readPersonName(issue.author) || "Unknown");
-    const priority = escapeHtml(issue.priority || "Not set");
-    const createdAt = escapeHtml(formatDate(issue.createdAt));
+    const priority = escapeHtml(readIssuePriority(issue));
+    const createdAt = escapeHtml(formatDate(readIssueCreatedAt(issue)));
     const labels = readLabels(issue.labels);
     const topClass = status === "closed" ? "closed" : "open";
 
@@ -350,14 +350,15 @@ async function openIssueModal(issueId) {
 }
 
 function renderIssueModal(issue, isFallback) {
-    const status = normalizeStatus(issue.status);
+    const status = normalizeStatus(readIssueStatus(issue));
     const labels = readLabels(issue.labels);
     const title = escapeHtml(issue.title || "Untitled issue");
     const description = escapeHtml(issue.description || "No description provided.");
     const author = escapeHtml(readPersonName(issue.author) || "Unknown");
     const assignee = escapeHtml(readPersonName(issue.assignee) || readPersonName(issue.author) || "Unassigned");
-    const priority = escapeHtml(issue.priority || "Not set");
-    const createdAt = escapeHtml(formatDate(issue.createdAt));
+    const priority = escapeHtml(readIssuePriority(issue));
+    const createdAt = escapeHtml(formatDate(readIssueCreatedAt(issue)));
+    const updatedAt = escapeHtml(formatDate(readIssueUpdatedAt(issue)));
     const issueId = escapeHtml(readIssueId(issue) || "Unknown");
 
     elements.modalContent.innerHTML = `
@@ -379,6 +380,10 @@ function renderIssueModal(issue, isFallback) {
 
         <div class="modal-detail-grid">
             <article class="detail-card">
+                <span class="detail-label">Author</span>
+                <span class="detail-value">${author}</span>
+            </article>
+            <article class="detail-card">
                 <span class="detail-label">Assignee</span>
                 <span class="detail-value">${assignee}</span>
             </article>
@@ -389,6 +394,14 @@ function renderIssueModal(issue, isFallback) {
             <article class="detail-card">
                 <span class="detail-label">Status</span>
                 <span class="detail-value">${escapeHtml(status)}</span>
+            </article>
+            <article class="detail-card">
+                <span class="detail-label">Created At</span>
+                <span class="detail-value">${createdAt}</span>
+            </article>
+            <article class="detail-card">
+                <span class="detail-label">Updated At</span>
+                <span class="detail-value">${updatedAt}</span>
             </article>
             <article class="detail-card">
                 <span class="detail-label">Issue ID</span>
@@ -453,6 +466,22 @@ function readPersonName(person) {
 
 function readIssueId(issue) {
     return issue?.id || issue?._id || issue?.issueId || "";
+}
+
+function readIssueStatus(issue) {
+    return issue?.status || issue?.category || issue?.state || "";
+}
+
+function readIssuePriority(issue) {
+    return issue?.priority || issue?.severity || "Not set";
+}
+
+function readIssueCreatedAt(issue) {
+    return issue?.createdAt || issue?.created_at || issue?.dateCreated || "";
+}
+
+function readIssueUpdatedAt(issue) {
+    return issue?.updatedAt || issue?.updated_at || issue?.lastUpdated || readIssueCreatedAt(issue);
 }
 
 function normalizeStatus(status) {
