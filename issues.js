@@ -1,11 +1,11 @@
-const AUTH_STORAGE_KEY = "phi-lab-issue-tracker-session";
-const API_BASE_URL = "https://phi-lab-server.vercel.app/api/v1/lab";
-const REQUEST_TIMEOUT_MS = 12000;
+const authKey = "phi-lab-issue-tracker-session";
+const apiUrl = "https://phi-lab-server.vercel.app/api/v1/lab";
+const REQUEST_TIMEOUT_MS = 12000; 
 
-const PRIMARY_BUTTON_CLASSES = "inline-flex min-h-[54px] items-center justify-center rounded-2xl bg-gradient-to-r from-brand to-[#6f43ff] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-brand/25 transition duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand/25 focus:outline-none focus:ring-4 focus:ring-brand/15 disabled:cursor-wait disabled:opacity-70 disabled:shadow-none";
-const TAB_BASE_CLASSES = "tab-button inline-flex min-h-11 min-w-[92px] items-center justify-center rounded-xl border px-5 text-sm font-bold transition duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-brand/15";
+const PRIMARY_BUTTON_CLASSES = "inline-flex min-h-[54px] items-center justify-center rounded-lg px-6 py-3 text-sm font-bold text-white shadow-lg";
+const TAB_BASE_CLASSES = "tab-button inline-flex min-h-11 min-w-[92px] items-center justify-center rounded-lg border px-5 text-sm font-bold ";
 const TAB_ACTIVE_CLASSES = "is-active border-transparent bg-blue-600 text-white shadow-lg shadow-blue-200";
-const TAB_INACTIVE_CLASSES = "border-slate-200 bg-white text-slate-500";
+const TAB_INACTIVE_CLASSES = "bg-white";
 
 const state = {
     activeTab: "all",
@@ -29,41 +29,42 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function cacheElements() {
     elements.grid = document.getElementById("issuesGrid");
-    elements.loadingState = document.getElementById("loadingState");
-    elements.feedbackState = document.getElementById("feedbackState");
-    elements.summaryCount = document.getElementById("summaryCount");
-    elements.summaryText = document.getElementById("summaryText");
-    elements.openCount = document.getElementById("openCount");
+elements.loadingState = document.getElementById("loadingState");
+   elements.feedbackState = document.getElementById("feedbackState");
+elements.summaryCount = document.getElementById("summaryCount");
+elements.summaryText = document.getElementById("summaryText");
+elements.openCount = document.getElementById("openCount");
     elements.closedCount = document.getElementById("closedCount");
-    elements.tabButtons = Array.from(document.querySelectorAll(".tab-button"));
-    elements.searchForm = document.getElementById("searchForm");
+elements.tabButtons = Array.from(document.querySelectorAll(".tab-button"));
+        elements.searchForm = document.getElementById("searchForm");
     elements.searchInput = document.getElementById("searchInput");
-    elements.logoutButton = document.getElementById("logoutButton");
-    elements.modal = document.getElementById("issueModal");
-    elements.modalContent = document.getElementById("modalContent");
-    elements.modalLoading = document.getElementById("modalLoading");
-    elements.modalCloseButton = document.getElementById("modalCloseButton");
+elements.logoutButton = document.getElementById("logoutButton");
+        elements.modal = document.getElementById("issueModal");
+        elements.modalContent = document.getElementById("modalContent");
+elements.modalLoading = document.getElementById("modalLoading");
+elements.modalCloseButton = document.getElementById("modalCloseButton");
 
     if (elements.searchForm) {
         elements.searchButton = elements.searchForm.querySelector("button[type='submit']");
-    } else {
+    }
+    else {
         elements.searchButton = null;
     }
 }
 
 function bindEvents() {
     for (let i = 0; i < elements.tabButtons.length; i += 1) {
-        const button = elements.tabButtons[i];
+    const button = elements.tabButtons[i];
 
-        button.addEventListener("click", function () {
+    button.addEventListener("click", function () {
             const selectedTab = button.dataset.tab || "all";
 
-            if (state.activeTab === selectedTab) {
+        if (state.activeTab === selectedTab) {
                 return;
-            }
+        }
 
-            state.activeTab = selectedTab;
-            updateActiveTab();
+        state.activeTab = selectedTab;
+         updateActiveTab();
             renderIssues();
         });
     }
@@ -72,9 +73,9 @@ function bindEvents() {
         elements.searchForm.addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            let nextQuery = "";
+         let nextQuery = "";
 
-            if (elements.searchInput) {
+        if (elements.searchInput) {
                 nextQuery = elements.searchInput.value.trim();
             }
 
@@ -83,32 +84,32 @@ function bindEvents() {
                 return;
             }
 
-            await loadIssues(nextQuery);
+        await loadIssues(nextQuery);
         });
     }
 
-    if (elements.searchInput) {
+        if (elements.searchInput) {
         elements.searchInput.addEventListener("input", async function (event) {
             const nextValue = event.target.value.trim();
 
-            if (nextValue === "" && state.searchQuery !== "") {
-                await loadIssues("");
+     if (nextValue === "" && state.searchQuery !== "") {
+             await loadIssues("");
             }
         });
     }
 
     if (elements.logoutButton) {
         elements.logoutButton.addEventListener("click", function () {
-            localStorage.removeItem(AUTH_STORAGE_KEY);
+            localStorage.removeItem(authKey);
             window.location.replace("./index.html");
         });
     }
 
-    if (elements.feedbackState) {
+if (elements.feedbackState) {
         elements.feedbackState.addEventListener("click", function (event) {
             const retryButton = event.target.closest("[data-action='retry']");
 
-            if (retryButton) {
+         if (retryButton) {
                 loadIssues(state.searchQuery);
             }
         });
@@ -118,7 +119,7 @@ function bindEvents() {
         elements.grid.addEventListener("click", function (event) {
             const card = event.target.closest(".issue-card");
 
-            if (card) {
+      if (card) {
                 openIssueModal(card.dataset.issueId);
             }
         });
@@ -126,18 +127,18 @@ function bindEvents() {
         elements.grid.addEventListener("keydown", function (event) {
             const card = event.target.closest(".issue-card");
 
-            if (!card) {
+     if (!card) {
                 return;
             }
 
             if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
+             event.preventDefault();
                 openIssueModal(card.dataset.issueId);
             }
         });
     }
 
-    if (elements.modalCloseButton) {
+        if (elements.modalCloseButton) {
         elements.modalCloseButton.addEventListener("click", closeIssueModal);
     }
 
@@ -152,7 +153,7 @@ function bindEvents() {
     document.addEventListener("keydown", function (event) {
         const modalIsOpen = elements.modal && !elements.modal.classList.contains("hidden");
 
-        if (event.key === "Escape" && modalIsOpen) {
+     if (event.key === "Escape" && modalIsOpen) {
             closeIssueModal();
         }
     });
@@ -179,10 +180,10 @@ async function loadIssues(query) {
     }
 
     try {
-        let endpoint = `${API_BASE_URL}/issues`;
+        let endpoint = `${apiUrl}/issues`;
 
         if (state.searchQuery !== "") {
-            endpoint = `${API_BASE_URL}/issues/search?q=${encodeURIComponent(state.searchQuery)}`;
+            endpoint = `${apiUrl}/issues/search?q=${encodeURIComponent(state.searchQuery)}`;
         }
 
         const payload = await fetchJsonWithTimeout(endpoint, "Unable to load issues.");
@@ -204,8 +205,8 @@ async function loadIssues(query) {
 }
 
 function renderIssues() {
-    const visibleIssues = getVisibleIssues();
-    const totalIssues = state.issues.length;
+const visibleIssues = getVisibleIssues();
+ const totalIssues = state.issues.length;
     let openIssues = 0;
     let closedIssues = 0;
 
@@ -215,7 +216,8 @@ function renderIssues() {
 
         if (status === "closed") {
             closedIssues += 1;
-        } else {
+        }
+    else {
             openIssues += 1;
         }
     }
@@ -229,7 +231,8 @@ function renderIssues() {
 
         if (state.searchQuery !== "") {
             showFeedback("No matching issues", `No issues matched "${state.searchQuery}". Try another keyword.`, false);
-        } else {
+        }
+    else {
             showFeedback("No issues found", "The API returned an empty issue list.", false);
         }
 
@@ -265,7 +268,7 @@ function getVisibleIssues() {
         const issue = state.issues[i];
         const issueStatus = normalizeStatus(readIssueStatus(issue));
 
-        if (state.activeTab === "all" || issueStatus === state.activeTab) {
+if (state.activeTab === "all" || issueStatus === state.activeTab) {
             visibleIssues.push(issue);
         }
     }
@@ -275,12 +278,12 @@ function getVisibleIssues() {
 
 function createIssueCard(issue) {
     const status = normalizeStatus(readIssueStatus(issue));
-    const title = escapeHtml(issue.title || "Untitled issue");
-    const description = escapeHtml(issue.description || "No description provided.");
-    const author = escapeHtml(readPersonName(issue.author) || "Unknown");
-    const priority = escapeHtml(readIssuePriority(issue));
+        const title = escapeHtml(issue.title || "Untitled issue");
+const description = escapeHtml(issue.description || "No description provided.");
+        const author = escapeHtml(readPersonName(issue.author) || "Unknown");
+const priority = escapeHtml(readIssuePriority(issue));
     const createdAt = escapeHtml(formatDate(readIssueCreatedAt(issue)));
-    const labels = readLabels(issue.labels);
+        const labels = readLabels(issue.labels);
     let cardBorderClass = "border-t-emerald-500";
 
     if (status === "closed") {
@@ -299,7 +302,7 @@ function createIssueCard(issue) {
     }
 
     return `
-        <article class="issue-card ${cardBorderClass} cursor-pointer rounded-3xl border border-slate-200 border-t-4 bg-white/95 p-[18px] pb-5 shadow-lg shadow-slate-900/5 transition duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/10 focus-visible:-translate-y-1 focus-visible:shadow-xl focus-visible:shadow-slate-900/10 focus-visible:outline-none" tabindex="0" role="button" data-issue-id="${escapeAttribute(readIssueId(issue))}">
+        <article class="issue-card ${cardBorderClass} cursor-pointer rounded-3xl border border-slate-200 border-t-4 bg-white/95 p-[18px] pb-5 shadow-lg shadow-slate-900/5 transition duration-200 " tabindex="0" role="button" data-issue-id="${escapeAttribute(readIssueId(issue))}">
             <div class="mb-3 flex items-center justify-between gap-3">
                 <span class="${statusChipClass}">${escapeHtml(status)}</span>
                 <span class="inline-flex items-center justify-center rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.04em] text-rose-500">${priority}</span>
@@ -307,7 +310,7 @@ function createIssueCard(issue) {
 
             <div>
                 <h3 class="mb-2 text-[1.02rem] font-bold leading-6 text-slate-900">${title}</h3>
-                <p class="min-h-[72px] overflow-hidden text-sm leading-6 text-slate-500 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">${description}</p>
+                <p class="min-h-[72px] overflow-hidden text-sm leading-6 text-slate-500 ">${description}</p>
             </div>
 
             <div class="mt-4 flex flex-wrap gap-2">
@@ -316,11 +319,11 @@ function createIssueCard(issue) {
 
             <div class="mt-[18px] flex items-start justify-between gap-3 border-t border-slate-200 pt-[14px]">
                 <div>
-                    <span class="mb-1 block text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-400">Author</span>
+                    <span class="mb-1 block text-[0.76rem] font-bold uppercase  text-slate-400">Author</span>
                     <span class="block font-semibold text-slate-900">${author}</span>
                 </div>
                 <div>
-                    <span class="mb-1 block text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-400">Created</span>
+                    <span class="mb-1 block text-[0.76rem] font-bold uppercase  text-slate-400">Created</span>
                     <span class="block font-semibold text-slate-900">${createdAt}</span>
                 </div>
             </div>
@@ -331,15 +334,15 @@ function createIssueCard(issue) {
 function buildSummaryText(visibleCount, totalCount) {
     let tabLabel = "all issues";
 
-    if (state.activeTab !== "all") {
+if (state.activeTab !== "all") {
         tabLabel = `${state.activeTab} issues`;
     }
 
-    if (totalCount === 0) {
+if (totalCount === 0) {
         return "Track and manage your project issues.";
     }
 
-    if (state.searchQuery !== "") {
+if (state.searchQuery !== "") {
         if (visibleCount === 1) {
             return `Showing 1 result for "${state.searchQuery}" in ${tabLabel}.`;
         }
@@ -466,7 +469,7 @@ async function openIssueModal(issueId) {
 
     try {
         const payload = await fetchJsonWithTimeout(
-            `${API_BASE_URL}/issue/${encodeURIComponent(issueId)}`,
+            `${apiUrl}/issue/${encodeURIComponent(issueId)}`,
             "Unable to load issue details."
         );
 
@@ -537,12 +540,12 @@ function renderIssueModal(issue, isFallback) {
         <div>
             <div class="mb-6">
                 <h2 id="modalTitle" class="mb-3 text-[clamp(1.8rem,4vw,2.5rem)] font-extrabold leading-[1.12] text-slate-900">${title}</h2>
-                <div class="flex flex-wrap items-center gap-3 text-sm font-semibold text-slate-500">
-                    <span class="${statusChipClass}">${escapeHtml(status)}</span>
-                    <span>Opened by ${author}</span>
-                    <span>&bull;</span>
+             <div class="flex flex-wrap items-center gap-3 text-sm font-semibold text-slate-500">
+                <span class="${statusChipClass}">${escapeHtml(status)}</span>
+             <span>Opened by ${author}</span>
+                 <span>&bull;</span>
                     <span>${createdAt}</span>
-                </div>
+             </div>
             </div>
 
             <div class="mb-[26px] flex flex-wrap gap-2.5">
@@ -553,12 +556,12 @@ function renderIssueModal(issue, isFallback) {
 
             <div class="mt-7 grid grid-cols-1 gap-4 md:grid-cols-2">
                 ${createDetailCard("Author", author)}
-                ${createDetailCard("Assignee", assignee)}
-                ${createDetailCard("Priority", `<span class="inline-flex items-center justify-center rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.04em] text-rose-500">${priority}</span>`)}
-                ${createDetailCard("Status", escapeHtml(status))}
-                ${createDetailCard("Created At", createdAt)}
+                 ${createDetailCard("Assignee", assignee)}
+                    ${createDetailCard("Priority", `<span class="inline-flex items-center justify-center rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.04em] text-rose-500">${priority}</span>`)}
+            ${createDetailCard("Status", escapeHtml(status))}
+                    ${createDetailCard("Created At", createdAt)}
                 ${createDetailCard("Updated At", updatedAt)}
-                ${createDetailCard("Issue ID", `#${issueId}`)}
+            ${createDetailCard("Issue ID", `#${issueId}`)}
             </div>
 
             ${fallbackText}
@@ -601,7 +604,7 @@ function getStatusChipClass(status) {
         return "inline-flex items-center justify-center rounded-full bg-violet-100 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.04em] text-violet-700";
     }
 
-    return "inline-flex items-center justify-center rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.04em] text-emerald-700";
+    return "inline-flex items-center justify-center rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-extrabold uppercase text-emerald-700";
 }
 
 function readLabels(labels) {
@@ -614,12 +617,13 @@ function readLabels(labels) {
     for (let i = 0; i < labels.length; i += 1) {
         const label = labels[i];
 
-        if (typeof label === "string" && label !== "") {
+    if (typeof label === "string" && label !== "") {
             labelList.push(label);
         } else if (label && typeof label === "object") {
             if (label.name) {
                 labelList.push(label.name);
-            } else if (label.label) {
+            }
+            else if (label.label) {
                 labelList.push(label.label);
             }
         }
@@ -633,15 +637,15 @@ function readPersonName(person) {
         return "";
     }
 
-    if (typeof person === "string") {
+if (typeof person === "string") {
         return person;
     }
 
-    if (person.name) {
+if (person.name) {
         return person.name;
     }
 
-    if (person.username) {
+if (person.username) {
         return person.username;
     }
 
@@ -723,9 +727,9 @@ function formatDate(value) {
 function escapeHtml(value) {
     return String(value)
         .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
+    .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
+    .replaceAll('"', "&quot;")
         .replaceAll("'", "&#39;");
 }
 
@@ -735,7 +739,7 @@ function escapeAttribute(value) {
 
 function hasActiveSession() {
     try {
-        const session = localStorage.getItem(AUTH_STORAGE_KEY);
+        const session = localStorage.getItem(authKey);
         return Boolean(session);
     } catch (error) {
         return false;
@@ -758,7 +762,7 @@ function setVisibility(element, shouldShow, displayClasses) {
     for (let i = 0; i < classesToShow.length; i += 1) {
         const className = classesToShow[i];
 
-        if (shouldShow) {
+    if (shouldShow) {
             element.classList.add(className);
         } else {
             element.classList.remove(className);
@@ -779,14 +783,14 @@ async function fetchJsonWithTimeout(url, fallbackMessage) {
             signal: controller.signal
         });
 
-        if (!response.ok) {
-            throw new Error(fallbackMessage);
+    if (!response.ok) {
+        throw new Error(fallbackMessage);
         }
 
         const data = await response.json();
         return data;
     } catch (error) {
-        if (error.name === "AbortError") {
+    if (error.name === "AbortError") {
             throw new Error("The request timed out.");
         }
 
@@ -799,16 +803,16 @@ async function fetchJsonWithTimeout(url, fallbackMessage) {
 function getRequestErrorMessage(error, isPageLoad) {
     let protocolHint = "";
 
-    if (window.location.protocol === "file:") {
+ if (window.location.protocol === "file:") {
         protocolHint = " Open the project with Live Server or another local server instead of opening the HTML file directly.";
     }
 
     if (error && error.message === "The request timed out.") {
-        return `The server took too long to respond.${protocolHint}`;
+    return `The server took too long to respond.${protocolHint}`;
     }
 
-    if (isPageLoad) {
-        return `Check the API connection and try again.${protocolHint}`;
+if (isPageLoad) {
+    return `Check the API connection and try again.${protocolHint}`;
     }
 
     return `Try closing the modal and opening the card again.${protocolHint}`;
