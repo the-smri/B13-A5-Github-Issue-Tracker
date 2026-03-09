@@ -7,88 +7,131 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: "#5a2df5"
+                    },
+                    fontFamily: {
+                        sans: ["Plus Jakarta Sans", "sans-serif"]
+                    }
+                }
+            }
+        };
+    </script>
 </head>
-<body class="dashboard-page">
-    <header class="topbar">
-        <div class="brand-inline">
-            <div class="brand-inline-mark">
-                <img src="./assets/github-logo.png" alt="GitHub Issues Tracker logo">
+<body class="min-h-screen bg-[linear-gradient(180deg,#ffffff_0,#ffffff_88px,transparent_88px),linear-gradient(180deg,#eef1f6_0%,#f5f7fb_100%)] font-sans text-slate-900 antialiased">
+    <header class="sticky top-0 z-20 border-b border-slate-200/80 bg-white/90 backdrop-blur">
+        <div class="mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-4 py-[18px] md:px-7 lg:flex-row lg:items-center lg:justify-between">
+            <div class="flex items-center gap-[14px]">
+                <div class="grid h-[52px] w-[52px] place-items-center rounded-2xl bg-gradient-to-br from-[rgba(90,45,245,0.14)] to-[rgba(90,45,245,0.04)] shadow-[inset_0_0_0_1px_rgba(90,45,245,0.10)]">
+                    <img src="./assets/github-logo.png" alt="GitHub Issues Tracker logo" class="h-10 w-10 object-contain">
+                </div>
+                <div>
+                    <p class="mb-1 text-[0.82rem] font-bold uppercase tracking-[0.16em] text-brand">Project Board</p>
+                    <h1 class="text-xl font-extrabold leading-tight md:text-[1.55rem]">GitHub Issues Tracker</h1>
+                </div>
             </div>
-            <div>
-                <p class="topbar-kicker">Project Board</p>
-                <h1>GitHub Issues Tracker</h1>
-            </div>
-        </div>
 
-        <div class="topbar-actions">
-            <form id="searchForm" class="search-shell">
-                <input id="searchInput" type="search" placeholder="Search issues..." aria-label="Search issues">
-                <button type="submit" class="secondary-button">Search</button>
-            </form>
-            <button id="logoutButton" class="ghost-button" type="button">Logout</button>
+            <div class="flex w-full flex-col gap-3 lg:w-auto lg:flex-row lg:items-center">
+                <form id="searchForm" class="flex w-full flex-col gap-2 sm:min-w-[420px] sm:flex-row">
+                    <input id="searchInput" type="search" placeholder="Search issues..." aria-label="Search issues" class="w-full min-w-0 rounded-2xl border border-slate-200 bg-white px-4 py-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand/40 focus:outline-none focus:ring-4 focus:ring-brand/10">
+                    <button type="submit" class="secondary-button inline-flex min-h-[54px] items-center justify-center rounded-2xl bg-brand px-6 text-sm font-bold text-white shadow-lg shadow-brand/20 transition duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand/20 focus:outline-none focus:ring-4 focus:ring-brand/15 disabled:cursor-wait disabled:opacity-70 disabled:shadow-none">Search</button>
+                </form>
+                <button id="logoutButton" class="ghost-button inline-flex min-h-[50px] items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-bold text-slate-900 transition duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-brand/10" type="button">Logout</button>
+            </div>
         </div>
     </header>
 
-    <main class="dashboard-shell">
-        <section class="surface surface-tabs">
-            <div class="tab-list" role="tablist" aria-label="Issue filters">
-                <button class="tab-button is-active" type="button" data-tab="all" role="tab" aria-selected="true">All</button>
-                <button class="tab-button" type="button" data-tab="open" role="tab" aria-selected="false">Open</button>
-                <button class="tab-button" type="button" data-tab="closed" role="tab" aria-selected="false">Closed</button>
+    <main class="mx-auto max-w-7xl px-4 py-6 md:px-4 md:py-9">
+        <section class="rounded-3xl border border-slate-200/80 bg-white/85 p-[18px] shadow-lg shadow-slate-900/5 backdrop-blur">
+            <div class="flex flex-wrap gap-2.5" role="tablist" aria-label="Issue filters">
+                <button class="tab-button is-active inline-flex min-h-11 min-w-[92px] items-center justify-center rounded-xl border border-transparent bg-brand px-5 text-sm font-bold text-white shadow-lg shadow-brand/20 transition duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-brand/15" type="button" data-tab="all" role="tab" aria-selected="true">All</button>
+                <button class="tab-button inline-flex min-h-11 min-w-[92px] items-center justify-center rounded-xl border border-slate-200 bg-white px-5 text-sm font-bold text-slate-500 transition duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-brand/15" type="button" data-tab="open" role="tab" aria-selected="false">Open</button>
+                <button class="tab-button inline-flex min-h-11 min-w-[92px] items-center justify-center rounded-xl border border-slate-200 bg-white px-5 text-sm font-bold text-slate-500 transition duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-brand/15" type="button" data-tab="closed" role="tab" aria-selected="false">Closed</button>
             </div>
         </section>
 
-        <section class="surface summary-panel">
-            <div class="summary-copy">
-                <div class="summary-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" focusable="false">
+        <section class="mt-[14px] flex flex-col gap-5 rounded-3xl border border-slate-200/80 bg-white/85 px-5 py-6 shadow-lg shadow-slate-900/5 backdrop-blur lg:flex-row lg:items-center lg:justify-between lg:px-[26px]">
+            <div class="flex items-center gap-4">
+                <div class="grid h-[52px] w-[52px] shrink-0 place-items-center rounded-full bg-gradient-to-br from-brand to-[#8159ff] text-white shadow-lg shadow-brand/20">
+                    <svg viewBox="0 0 24 24" focusable="false" class="h-6 w-6 fill-current">
                         <path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2Zm0 2.4a7.59 7.59 0 0 1 5.21 2.06l-1.72 1.72A5.21 5.21 0 0 0 12 6.8Zm-6.81 5.8a7.49 7.49 0 0 1 1.73-3.73l1.72 1.72a5.16 5.16 0 0 0-1.16 2.51Zm1.73 7.34a7.49 7.49 0 0 1-1.73-3.74h2.29a5.16 5.16 0 0 0 1.16 2.51Zm5.08 2.06a7.59 7.59 0 0 1-5.21-2.06l1.72-1.72A5.21 5.21 0 0 0 12 17.2Zm0-5.1A2.5 2.5 0 1 1 14.5 12 2.5 2.5 0 0 1 12 14.5Zm3.49 3.04 1.72 1.72A7.59 7.59 0 0 1 12 19.6v-2.4a5.21 5.21 0 0 0 3.49-1.66Zm1.03-3.74a5.16 5.16 0 0 0-1.16-2.51l1.72-1.72a7.49 7.49 0 0 1 1.73 3.73Z"></path>
                     </svg>
                 </div>
                 <div>
-                    <h2 id="summaryCount">0 Issues</h2>
-                    <p id="summaryText">Track and manage your project issues.</p>
+                    <h2 id="summaryCount" class="text-xl font-extrabold md:text-2xl">0 Issues</h2>
+                    <p id="summaryText" class="mt-1 text-slate-500">Track and manage your project issues.</p>
                 </div>
             </div>
 
-            <div class="status-legend" aria-label="Issue status counts">
-                <span class="legend-pill open">
-                    <i></i>
-                    <strong id="openCount">0</strong>
+            <div class="flex flex-wrap gap-3" aria-label="Issue status counts">
+                <span class="inline-flex items-center gap-2 rounded-full bg-slate-50 px-[14px] py-3 text-[0.94rem] font-semibold text-slate-900">
+                    <i class="inline-block h-2.5 w-2.5 rounded-full bg-emerald-500"></i>
+                    <strong id="openCount" class="text-[0.98rem]">0</strong>
                     Open
                 </span>
-                <span class="legend-pill closed">
-                    <i></i>
-                    <strong id="closedCount">0</strong>
+                <span class="inline-flex items-center gap-2 rounded-full bg-slate-50 px-[14px] py-3 text-[0.94rem] font-semibold text-slate-900">
+                    <i class="inline-block h-2.5 w-2.5 rounded-full bg-violet-500"></i>
+                    <strong id="closedCount" class="text-[0.98rem]">0</strong>
                     Closed
                 </span>
             </div>
         </section>
 
-        <section class="content-section">
-            <div id="loadingState" class="state-card loading-state" hidden>
-                <span class="spinner" aria-hidden="true"></span>
-                <p>Loading issues...</p>
+        <section class="mt-5">
+            <div id="loadingState" class="mb-[18px] hidden rounded-3xl border border-dashed border-brand/20 bg-white/80 px-6 py-10 text-center" aria-hidden="true">
+                <span class="inline-block h-11 w-11 animate-spin rounded-full border-4 border-brand/15 border-t-brand" aria-hidden="true"></span>
+                <p class="text-slate-500">Loading issues...</p>
             </div>
 
-            <div id="feedbackState" class="state-card" hidden></div>
+            <div id="feedbackState" class="mb-[18px] hidden rounded-3xl border border-dashed border-brand/20 bg-white/80 px-6 py-10 text-center" aria-hidden="true"></div>
 
-            <div id="issuesGrid" class="issues-grid" aria-live="polite"></div>
+            <div id="issuesGrid" class="grid grid-cols-1 gap-[18px] md:grid-cols-2 xl:grid-cols-4" aria-live="polite"></div>
         </section>
     </main>
 
-    <div id="issueModal" class="modal-backdrop" hidden>
-        <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-            <button id="modalCloseButton" class="modal-close" type="button" aria-label="Close modal">×</button>
+    <div id="issueModal" class="fixed inset-0 z-40 hidden bg-slate-950/45 p-6 backdrop-blur-sm" aria-hidden="true">
+        <div class="relative max-h-[90vh] w-full max-w-3xl overflow-auto rounded-[26px] bg-white p-5 shadow-2xl shadow-slate-950/20 sm:p-10" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <button id="modalCloseButton" class="absolute right-[18px] top-[18px] inline-flex h-[42px] w-[42px] items-center justify-center rounded-full bg-slate-100 text-[1.55rem] leading-none text-slate-900 transition duration-200 hover:bg-slate-200 focus:outline-none focus:ring-4 focus:ring-brand/10" type="button" aria-label="Close modal">&times;</button>
 
-            <div id="modalLoading" class="modal-loading" hidden>
-                <span class="spinner" aria-hidden="true"></span>
-                <p>Loading issue details...</p>
+            <div id="modalLoading" class="hidden" aria-hidden="true">
+                <span class="inline-block h-11 w-11 animate-spin rounded-full border-4 border-brand/15 border-t-brand" aria-hidden="true"></span>
+                <p class="text-slate-500">Loading issue details...</p>
             </div>
 
             <div id="modalContent"></div>
         </div>
+    </div>
+
+    <div class="hidden">
+        <article class="issue-card rounded-3xl border border-slate-200 border-t-4 border-t-emerald-500 bg-white/95 p-[18px] pb-5 shadow-lg shadow-slate-900/5 transition duration-200 hover:-translate-y-1 hover:shadow-xl focus-visible:-translate-y-1 focus-visible:shadow-xl"></article>
+        <article class="issue-card rounded-3xl border border-slate-200 border-t-4 border-t-violet-500 bg-white/95 p-[18px] pb-5 shadow-lg shadow-slate-900/5 transition duration-200 hover:-translate-y-1 hover:shadow-xl focus-visible:-translate-y-1 focus-visible:shadow-xl"></article>
+        <article class="hover:shadow-slate-900/10 focus-visible:shadow-slate-900/10"></article>
+        <span class="inline-flex items-center justify-center rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.04em] text-emerald-700"></span>
+        <span class="inline-flex items-center justify-center rounded-full bg-violet-100 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.04em] text-violet-700"></span>
+        <span class="inline-flex items-center justify-center rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.04em] text-rose-500"></span>
+        <span class="inline-flex items-center justify-center rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.04em] text-amber-700"></span>
+        <button class="inline-flex min-h-[54px] items-center justify-center rounded-2xl bg-gradient-to-r from-brand to-[#6f43ff] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-brand/25 transition duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand/25 focus:outline-none focus:ring-4 focus:ring-brand/15 disabled:cursor-wait disabled:opacity-70 disabled:shadow-none"></button>
+        <div class="mt-4 flex flex-wrap gap-2"></div>
+        <div class="mt-[18px] flex items-start justify-between gap-3 border-t border-slate-200 pt-[14px]"></div>
+        <span class="mb-1 block text-[0.76rem] font-bold uppercase tracking-[0.08em] text-slate-400"></span>
+        <span class="block font-semibold text-slate-900"></span>
+        <h3 class="mb-2 text-xl font-bold text-slate-900"></h3>
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-extrabold leading-[1.12] text-slate-900"></h2>
+        <p class="mb-5 text-slate-500"></p>
+        <p class="min-h-[72px] overflow-hidden text-sm leading-6 text-slate-500 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]"></p>
+        <div class="flex flex-wrap items-center gap-3 text-sm font-semibold text-slate-500"></div>
+        <p class="text-lg leading-8 text-slate-500 sm:text-xl"></p>
+        <div class="mt-7 grid grid-cols-1 gap-4 md:grid-cols-2"></div>
+        <article class="rounded-3xl bg-slate-50 p-5"></article>
+        <span class="mb-2.5 block text-slate-500"></span>
+        <span class="block text-lg font-bold text-slate-900"></span>
+        <p class="mt-5 text-slate-500"></p>
+        <div class="mt-7 flex justify-end"></div>
     </div>
 
     <script src="./issues.js"></script>

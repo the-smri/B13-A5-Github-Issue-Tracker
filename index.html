@@ -3,45 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Issues Tracker | Sign In</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>GitHub Issues Tracker</title>
+   <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: "#5a2df5"
+                    },
+                    fontFamily: {
+                        sans: ["Plus Jakarta Sans", "sans-serif"]
+                    }
+                }
+            }
+        };
+
+</script> -->
+
+    <!-- Google Fonts -->
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind + DaisyUI -->
+     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="./styles.css">
 </head>
-<body class="auth-page">
-    <main class="auth-shell">
-        <section class="auth-card">
-            <div class="brand-lockup">
-                <div class="brand-mark">
-                    <img src="./assets/github-logo.png" alt="GitHub Issues Tracker logo">
+<body class="geist-font">
+    <main class="grid min-h-screen place-items-center px-5 py-8">
+        <section class="w-full max-w-[490px] rounded-[28px] border border-[rgba(90,45,245,0.12)] bg-white/95 p-7 shadow-2xl shadow-slate-900/10 backdrop-blur sm:p-9">
+            <div class="mb-7">
+                <div class="flex justify-center mx-auto"> 
+                    <img src="./assets/github-logo.png" alt="GitHub Issues Tracker logo" class="h-11 w-11 object-contain">
                 </div>
-                <p class="eyebrow">Phi Lab Assignment</p>
-                <h1>GitHub Issues Tracker</h1>
-                <p class="auth-subtitle">Sign in with the admin account to review, search, and inspect project issues.</p>
+                <h2 class="flex justify-center mx-auto">GitHub Issues Tracker</h2>
+                <p class="flex justify-center mx-auto">Sign in to manage your issues</p>
             </div>
 
-            <form id="loginForm" class="auth-form" novalidate>
-                <label class="field">
-                    <span>Username</span>
-                    <input id="username" name="username" type="text" autocomplete="username" placeholder="Enter username">
+            <form id="loginForm" class="grid gap-[18px]" novalidate>
+                <label class="grid gap-2.5">
+                    <span class="text-[0.94rem] font-bold">Username</span>
+                    <input id="username" name="username" type="text" autocomplete="username" placeholder="Enter username" class="w-full rounded-xl bg-white px-[18px] py-[15px] ">
                 </label>
 
-                <label class="field">
-                    <span>Password</span>
-                    <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password">
+                <label class="grid gap-2.5">
+                    <span class="text-[0.94rem] font-bold">Password</span>
+                    <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password" class="w-full rounded-xl  bg-white px-[18px] py-[15px]"> 
                 </label>
 
-                <p id="loginError" class="form-error" aria-live="polite"></p>
+                <p id="loginError" class="-mt-1 min-h-[1.1rem] text-[0.92rem] text-rose-500" aria-live="polite"></p>
 
-                <button type="submit" class="primary-button">Sign In</button>
+                <button type="submit" class="inline-flex min-h-[54px] items-center justify-center rounded-2xl bg-gradient-to-r from-brand to-[#6f43ff] px-6 text-sm font-bold text-white shadow-lg shadow-brand/25 transition duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand/25 focus:outline-none focus:ring-4 focus:ring-brand/15 disabled:cursor-wait disabled:opacity-70 disabled:shadow-none">Sign In</button>
             </form>
 
-            <button id="demoButton" class="demo-card" type="button">
-                <span class="demo-label">Demo Credentials</span>
-                <span><strong>Username:</strong> admin</span>
-                <span><strong>Password:</strong> admin123</span>
-                <span class="demo-hint">Click to autofill the form.</span>
+            <button id="demoButton" class="mt-[18px] grid w-full gap-2 rounded-[20px] border border-brand/15 bg-gradient-to-b from-brand/10 to-brand/[0.02] px-5 py-[18px] text-left text-slate-900 transition duration-200 hover:-translate-y-0.5 hover:border-brand/25 focus:outline-none focus:ring-4 focus:ring-brand/10" type="button">
+                <span class="text-[0.82rem] font-extrabold uppercase tracking-[0.14em] text-brand">Demo Credentials</span>
+                <span><strong class="text-brand">Username:</strong> admin</span>
+                <span><strong class="text-brand">Password:</strong> admin123</span>
+                <span class="text-[0.92rem] text-slate-500">Click to autofill the form.</span>
             </button>
         </section>
     </main>

@@ -4,7 +4,7 @@ const DEMO_CREDENTIALS = {
     password: "admin123"
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
     if (hasActiveSession()) {
         window.location.replace("./issues.html");
         return;
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    demoButton.addEventListener("click", () => {
+    demoButton.addEventListener("click", function () {
         usernameInput.value = DEMO_CREDENTIALS.username;
         passwordInput.value = DEMO_CREDENTIALS.password;
         errorElement.textContent = "";
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         usernameInput.setSelectionRange(usernameInput.value.length, usernameInput.value.length);
     });
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", function (event) {
         event.preventDefault();
 
         const username = usernameInput.value.trim();
@@ -57,7 +57,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function hasActiveSession() {
     try {
-        return Boolean(localStorage.getItem(AUTH_STORAGE_KEY));
+        const session = localStorage.getItem(AUTH_STORAGE_KEY);
+        return Boolean(session);
     } catch (error) {
         return false;
     }
