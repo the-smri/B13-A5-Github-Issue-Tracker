@@ -32,6 +32,11 @@ function cacheElements() {
     elements.searchForm = document.getElementById("searchForm");
     elements.searchInput = document.getElementById("searchInput");
     elements.logoutButton = document.getElementById("logoutButton");
+    elements.searchButton = elements.searchForm?.querySelector("button[type='submit']");
+    elements.modal = document.getElementById("issueModal");
+    elements.modalContent = document.getElementById("modalContent");
+    elements.modalLoading = document.getElementById("modalLoading");
+    elements.modalCloseButton = document.getElementById("modalCloseButton");
 }
 
 function bindEvents() {
@@ -49,18 +54,23 @@ function bindEvents() {
         });
     });
 
-    elements.searchForm?.addEventListener("submit", (event) => {
+    elements.searchForm?.addEventListener("submit", async (event) => {
         event.preventDefault();
-        state.searchQuery = elements.searchInput?.value.trim().toLowerCase() || "";
-        renderIssues();
+        const nextQuery = elements.searchInput?.value.trim() || "";
+
+        if (nextQuery === state.searchQuery && state.issues.length) {
+            renderIssues();
+            return;
+        }
+
+        await loadIssues(nextQuery);
     });
 
-    elements.searchInput?.addEventListener("input", (event) => {
-        const nextValue = event.target.value.trim().toLowerCase();
+    elements.searchInput?.addEventListener("input", async (event) => {
+        const nextValue = event.target.value.trim();
 
         if (!nextValue && state.searchQuery) {
-            state.searchQuery = "";
-            renderIssues();
+            await loadIssues("");
         }
     });
 
@@ -73,17 +83,61 @@ function bindEvents() {
         const retryButton = event.target.closest("[data-action='retry']");
 
         if (retryButton) {
-            loadIssues();
+            loadIssues(state.searchQuery);
+        }
+    });
+
+    elements.grid?.addEventListener("click", (event) => {
+        const card = event.target.closest(".issue-card");
+
+        if (card) {
+            openIssueModal(card.dataset.issueId);
+        }
+    });
+
+    elements.grid?.addEventListener("keydown", (event) => {
+        const card = event.target.closest(".issue-card");
+
+        if (!card) {
+            return;
+        }
+
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openIssueModal(card.dataset.issueId);
+        }
+    });
+
+    elements.modalCloseButton?.addEventListener("click", closeIssueModal);
+
+    elements.modal?.addEventListener("click", (event) => {
+        if (event.target === elements.modal) {
+            closeIssueModal();
+        }
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && elements.modal && !elements.modal.hidden) {
+            closeIssueModal();
         }
     });
 }
 
-async function loadIssues() {
+async function loadIssues(query = state.searchQuery) {
     setLoading(true);
     hideFeedback();
+    elements.grid.innerHTML = "";
+    state.searchQuery = query.trim();
+
+    if (elements.searchInput && elements.searchInput.value !== state.searchQuery) {
+        elements.searchInput.value = state.searchQuery;
+    }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/issues`);
+        const endpoint = state.searchQuery
+            ? `${API_BASE_URL}/issues/search?q=${encodeURIComponent(state.searchQuery)}`
+            : `${API_BASE_URL}/issues`;
+        const response = await fetch(endpoint);
 
         if (!response.ok) {
             throw new Error("Unable to load issues.");
@@ -95,6 +149,7 @@ async function loadIssues() {
         renderIssues();
     } catch (error) {
         state.issues = [];
+        updateSummary(0, 0, 0);
         elements.grid.innerHTML = "";
         showFeedback("Could not load issues", "Check the API connection and try again.", true);
     } finally {
@@ -108,14 +163,17 @@ function renderIssues() {
     const openIssues = state.issues.filter((issue) => normalizeStatus(issue.status) === "open").length;
     const closedIssues = state.issues.filter((issue) => normalizeStatus(issue.status) === "closed").length;
 
-    elements.summaryCount.textContent = `${visibleIssues.length} ${visibleIssues.length === 1 ? "Issue" : "Issues"}`;
-    elements.summaryText.textContent = buildSummaryText(visibleIssues.length, totalIssues);
-    elements.openCount.textContent = String(openIssues);
-    elements.closedCount.textContent = String(closedIssues);
+    updateSummary(visibleIssues.length, openIssues, closedIssues, totalIssues);
 
     if (!totalIssues) {
         elements.grid.innerHTML = "";
-        showFeedback("No issues found", "The API returned an empty issue list.", false);
+        showFeedback(
+            state.searchQuery ? "No matching issues" : "No issues found",
+            state.searchQuery
+                ? `No issues matched "${state.searchQuery}". Try another keyword.`
+                : "The API returned an empty issue list.",
+            false
+        );
         return;
     }
 
@@ -133,9 +191,8 @@ function getVisibleIssues() {
     return state.issues.filter((issue) => {
         const issueStatus = normalizeStatus(issue.status);
         const matchesTab = state.activeTab === "all" ? true : issueStatus === state.activeTab;
-        const matchesSearch = state.searchQuery ? issueMatchesSearch(issue, state.searchQuery) : true;
 
-        return matchesTab && matchesSearch;
+        return matchesTab;
     });
 }
 
@@ -197,22 +254,13 @@ function buildSummaryText(visibleCount, totalCount) {
     return `Showing ${visibleCount} of ${totalCount} issues in the ${tabLabel} view.`;
 }
 
-function issueMatchesSearch(issue, query) {
-    const searchableValues = [
-        issue.title,
-        issue.description,
-        issue.priority,
-        readPersonName(issue.author),
-        ...readLabels(issue.labels)
-    ];
-
-    return searchableValues
-        .filter(Boolean)
-        .some((value) => String(value).toLowerCase().includes(query));
-}
-
 function setLoading(isLoading) {
     elements.loadingState.hidden = !isLoading;
+
+    if (elements.searchButton) {
+        elements.searchButton.disabled = isLoading;
+        elements.searchButton.textContent = isLoading ? "Loading..." : "Search";
+    }
 }
 
 function showFeedback(title, description, showRetryButton) {
@@ -229,6 +277,13 @@ function showFeedback(title, description, showRetryButton) {
 function hideFeedback() {
     elements.feedbackState.hidden = true;
     elements.feedbackState.innerHTML = "";
+}
+
+function updateSummary(visibleCount, openIssues, closedIssues, totalCount = state.issues.length) {
+    elements.summaryCount.textContent = `${visibleCount} ${visibleCount === 1 ? "Issue" : "Issues"}`;
+    elements.summaryText.textContent = buildSummaryText(visibleCount, totalCount);
+    elements.openCount.textContent = String(openIssues);
+    elements.closedCount.textContent = String(closedIssues);
 }
 
 function updateActiveTab() {
@@ -249,6 +304,119 @@ function extractIssues(payload) {
     }
 
     return [];
+}
+
+async function openIssueModal(issueId) {
+    if (!issueId || !elements.modal || !elements.modalContent || !elements.modalLoading) {
+        return;
+    }
+
+    const fallbackIssue = state.issues.find((issue) => String(readIssueId(issue)) === String(issueId));
+
+    elements.modal.hidden = false;
+    elements.modalLoading.hidden = false;
+    elements.modalContent.innerHTML = "";
+    document.body.classList.add("modal-open");
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/issue/${encodeURIComponent(issueId)}`);
+
+        if (!response.ok) {
+            throw new Error("Unable to load issue details.");
+        }
+
+        const payload = await response.json();
+        const issue = payload?.data || fallbackIssue;
+
+        if (!issue) {
+            throw new Error("Issue details not found.");
+        }
+
+        renderIssueModal(issue, false);
+    } catch (error) {
+        if (fallbackIssue) {
+            renderIssueModal(fallbackIssue, true);
+        } else {
+            elements.modalContent.innerHTML = `
+                <div class="feedback-copy">
+                    <h3>Could not load issue details</h3>
+                    <p>Try closing the modal and opening the card again.</p>
+                </div>
+            `;
+        }
+    } finally {
+        elements.modalLoading.hidden = true;
+    }
+}
+
+function renderIssueModal(issue, isFallback) {
+    const status = normalizeStatus(issue.status);
+    const labels = readLabels(issue.labels);
+    const title = escapeHtml(issue.title || "Untitled issue");
+    const description = escapeHtml(issue.description || "No description provided.");
+    const author = escapeHtml(readPersonName(issue.author) || "Unknown");
+    const assignee = escapeHtml(readPersonName(issue.assignee) || readPersonName(issue.author) || "Unassigned");
+    const priority = escapeHtml(issue.priority || "Not set");
+    const createdAt = escapeHtml(formatDate(issue.createdAt));
+    const issueId = escapeHtml(readIssueId(issue) || "Unknown");
+
+    elements.modalContent.innerHTML = `
+        <div class="modal-header">
+            <h2 id="modalTitle">${title}</h2>
+            <div class="modal-meta">
+                <span class="status-chip ${status}">${escapeHtml(status)}</span>
+                <span>Opened by ${author}</span>
+                <span>&bull;</span>
+                <span>${createdAt}</span>
+            </div>
+        </div>
+
+        <div class="modal-labels">
+            ${labels.length ? labels.map((label) => `<span class="label-chip">${escapeHtml(label)}</span>`).join("") : '<span class="label-chip">General</span>'}
+        </div>
+
+        <p class="modal-description">${description}</p>
+
+        <div class="modal-detail-grid">
+            <article class="detail-card">
+                <span class="detail-label">Assignee</span>
+                <span class="detail-value">${assignee}</span>
+            </article>
+            <article class="detail-card">
+                <span class="detail-label">Priority</span>
+                <span class="detail-value"><span class="priority-chip">${priority}</span></span>
+            </article>
+            <article class="detail-card">
+                <span class="detail-label">Status</span>
+                <span class="detail-value">${escapeHtml(status)}</span>
+            </article>
+            <article class="detail-card">
+                <span class="detail-label">Issue ID</span>
+                <span class="detail-value">#${issueId}</span>
+            </article>
+        </div>
+
+        ${isFallback ? '<p class="modal-fallback-note">Showing the card data because the single-issue request could not be completed.</p>' : ""}
+
+        <div class="modal-actions">
+            <button class="primary-button" type="button" data-action="close-modal">Close</button>
+        </div>
+    `;
+
+    const closeButton = elements.modalContent.querySelector("[data-action='close-modal']");
+
+    closeButton?.addEventListener("click", closeIssueModal);
+}
+
+function closeIssueModal() {
+    if (!elements.modal || !elements.modalContent || !elements.modalLoading) {
+        return;
+    }
+
+    elements.modal.hidden = true;
+    elements.modalContent.innerHTML = "";
+    elements.modalLoading.hidden = true;
+    document.body.classList.remove("modal-open");
 }
 
 function readLabels(labels) {
