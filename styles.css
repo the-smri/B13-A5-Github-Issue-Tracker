@@ -40,3 +40,209 @@ input {
 [hidden] {
     display: none !important;
 }
+
+a {
+    color: inherit;
+}
+
+.auth-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(90, 45, 245, 0.16), transparent 34%),
+        radial-gradient(circle at right 12%, rgba(18, 185, 129, 0.12), transparent 26%),
+        linear-gradient(180deg, #f8f9fc 0%, #eef1f7 100%);
+}
+
+.auth-shell {
+    min-height: 100vh;
+    padding: 32px 20px;
+    display: grid;
+    place-items: center;
+}
+
+.auth-card {
+    width: min(100%, 490px);
+    padding: 36px;
+    border: 1px solid rgba(90, 45, 245, 0.12);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(16px);
+}
+
+.brand-lockup {
+    margin-bottom: 28px;
+}
+
+.brand-mark,
+.brand-inline-mark {
+    width: 68px;
+    height: 68px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(90, 45, 245, 0.14), rgba(90, 45, 245, 0.04));
+    display: grid;
+    place-items: center;
+    box-shadow: inset 0 0 0 1px rgba(90, 45, 245, 0.1);
+}
+
+.brand-mark img,
+.brand-inline-mark img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+}
+
+.eyebrow,
+.topbar-kicker {
+    margin: 18px 0 10px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--brand);
+}
+
+.brand-lockup h1,
+.brand-inline h1 {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 2.65rem);
+    line-height: 1.05;
+}
+
+.auth-subtitle {
+    margin: 14px 0 0;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.auth-form {
+    display: grid;
+    gap: 18px;
+}
+
+.field {
+    display: grid;
+    gap: 10px;
+}
+
+.field span {
+    font-size: 0.94rem;
+    font-weight: 700;
+}
+
+.field input,
+.search-shell input {
+    width: 100%;
+    padding: 15px 18px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #fff;
+    color: var(--text);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.field input:focus,
+.search-shell input:focus {
+    outline: none;
+    border-color: rgba(90, 45, 245, 0.45);
+    box-shadow: 0 0 0 4px rgba(90, 45, 245, 0.1);
+}
+
+.field input::placeholder,
+.search-shell input::placeholder {
+    color: #9ca5b5;
+}
+
+.primary-button,
+.secondary-button,
+.ghost-button {
+    border: 0;
+    border-radius: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.primary-button,
+.secondary-button {
+    min-height: 54px;
+    padding: 0 22px;
+}
+
+.primary-button {
+    background: linear-gradient(135deg, var(--brand) 0%, #6f43ff 100%);
+    color: #fff;
+    box-shadow: 0 14px 30px rgba(90, 45, 245, 0.24);
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.ghost-button:hover {
+    transform: translateY(-1px);
+}
+
+.primary-button:hover {
+    box-shadow: 0 18px 34px rgba(90, 45, 245, 0.28);
+}
+
+.secondary-button {
+    background: var(--brand);
+    color: #fff;
+}
+
+.ghost-button {
+    min-height: 50px;
+    padding: 0 18px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--text);
+}
+
+.demo-card {
+    width: 100%;
+    margin-top: 18px;
+    padding: 18px 20px;
+    display: grid;
+    gap: 8px;
+    text-align: left;
+    border: 1px solid rgba(90, 45, 245, 0.16);
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(90, 45, 245, 0.08), rgba(90, 45, 245, 0.02));
+    color: var(--text);
+    cursor: pointer;
+}
+
+.demo-card strong {
+    color: var(--brand);
+}
+
+.demo-label {
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--brand);
+}
+
+.demo-hint {
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.form-error {
+    min-height: 1.1rem;
+    margin: -4px 0 0;
+    font-size: 0.92rem;
+    color: var(--danger);
+}
+
+@media (max-width: 640px) {
+    .auth-card {
+        padding: 28px 22px;
+        border-radius: 24px;
+    }
+
+    .brand-lockup h1 {
+        font-size: 1.9rem;
+    }
+}
