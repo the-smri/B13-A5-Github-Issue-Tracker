@@ -4,7 +4,7 @@ const REQUEST_TIMEOUT_MS = 12000;
 
 const PRIMARY_BUTTON_CLASSES = "inline-flex min-h-[54px] items-center justify-center rounded-2xl bg-gradient-to-r from-brand to-[#6f43ff] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-brand/25 transition duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand/25 focus:outline-none focus:ring-4 focus:ring-brand/15 disabled:cursor-wait disabled:opacity-70 disabled:shadow-none";
 const TAB_BASE_CLASSES = "tab-button inline-flex min-h-11 min-w-[92px] items-center justify-center rounded-xl border px-5 text-sm font-bold transition duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-brand/15";
-const TAB_ACTIVE_CLASSES = "is-active border-transparent bg-brand text-white shadow-lg shadow-brand/20";
+const TAB_ACTIVE_CLASSES = "is-active border-transparent bg-blue-600 text-white shadow-lg shadow-blue-200";
 const TAB_INACTIVE_CLASSES = "border-slate-200 bg-white text-slate-500";
 
 const state = {

@@ -41,33 +41,32 @@
         <section class="w-full max-w-[490px] rounded-[28px] border border-[rgba(90,45,245,0.12)] bg-white/95 p-7 shadow-2xl shadow-slate-900/10 backdrop-blur sm:p-9">
             <div class="mb-7">
                 <div class="flex justify-center mx-auto"> 
-                    <img src="./assets/github-logo.png" alt="GitHub Issues Tracker logo" class="h-11 w-11 object-contain">
+                    <img src="./assets/github-logo.png" alt="GitHub Issues Tracker logo" class="h-15 w-15 mb-4">
                 </div>
-                <h2 class="flex justify-center mx-auto">GitHub Issues Tracker</h2>
-                <p class="flex justify-center mx-auto">Sign in to manage your issues</p>
+                <h2 class="flex justify-center mx-auto font-bold">GitHub Issues Tracker</h2>
+                <p class="flex justify-center mx-auto text-[#64748B]">Sign in to manage your issues</p>
             </div>
 
             <form id="loginForm" class="grid gap-[18px]" novalidate>
                 <label class="grid gap-2.5">
                     <span class="text-[0.94rem] font-bold">Username</span>
-                    <input id="username" name="username" type="text" autocomplete="username" placeholder="Enter username" class="w-full rounded-xl bg-white px-[18px] py-[15px] ">
+                    <input id="username" name="username" type="text" autocomplete="username" placeholder="Enter username" class="w-full rounded-lg bg-white px-[12px] py-[12px] ">
                 </label>
 
                 <label class="grid gap-2.5">
                     <span class="text-[0.94rem] font-bold">Password</span>
-                    <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password" class="w-full rounded-xl  bg-white px-[18px] py-[15px]"> 
+                    <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password" class="w-full rounded-lg  bg-white px-[12px] py-[12px]"> 
                 </label>
 
                 <p id="loginError" class="-mt-1 min-h-[1.1rem] text-[0.92rem] text-rose-500" aria-live="polite"></p>
 
-                <button type="submit" class="inline-flex min-h-[54px] items-center justify-center rounded-2xl bg-gradient-to-r from-brand to-[#6f43ff] px-6 text-sm font-bold text-white shadow-lg shadow-brand/25 transition duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand/25 focus:outline-none focus:ring-4 focus:ring-brand/15 disabled:cursor-wait disabled:opacity-70 disabled:shadow-none">Sign In</button>
+                <button type="submit" class="btn btn-primary">Sign In</button>
             </form>
 
-            <button id="demoButton" class="mt-[18px] grid w-full gap-2 rounded-[20px] border border-brand/15 bg-gradient-to-b from-brand/10 to-brand/[0.02] px-5 py-[18px] text-left text-slate-900 transition duration-200 hover:-translate-y-0.5 hover:border-brand/25 focus:outline-none focus:ring-4 focus:ring-brand/10" type="button">
-                <span class="text-[0.82rem] font-extrabold uppercase tracking-[0.14em] text-brand">Demo Credentials</span>
+            <button id="demoButton" class="flex flex-col justify-center items-center mx-auto" type="button">
+                <span class="">Demo Credentials</span>
                 <span><strong class="text-brand">Username:</strong> admin</span>
                 <span><strong class="text-brand">Password:</strong> admin123</span>
-                <span class="text-[0.92rem] text-slate-500">Click to autofill the form.</span>
             </button>
         </section>
     </main>
